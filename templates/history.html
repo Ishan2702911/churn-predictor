@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Audit Log — ChurnScan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="shell">
+
+    <header class="site-header">
+      <div class="logo">CHURN<span>SCAN</span></div>
+      <nav>
+        <a href="/">Predict</a>
+        <a href="/history">Audit Log</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-title">
+        <h1>Audit Log</h1>
+        <p>Last 20 predictions logged to SQLite.</p>
+      </div>
+
+      {% if records %}
+      <div class="table-wrap">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Timestamp</th>
+              <th>Tenure</th>
+              <th>Monthly $</th>
+              <th>Contract</th>
+              <th>Internet</th>
+              <th>Payment</th>
+              <th>Prediction</th>
+              <th>Probability</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in records %}
+            <tr>
+              <td class="mono">{{ r.id }}</td>
+              <td class="mono">{{ r.timestamp }}</td>
+              <td>{{ r.tenure }}</td>
+              <td>{{ r.monthly_charges }}</td>
+              <td>{{ r.contract }}</td>
+              <td>{{ r.internet_service }}</td>
+              <td>{{ r.payment_method }}</td>
+              <td class="{% if r.churn_prediction == 'Churn' %}tag-churn{% else %}tag-safe{% endif %}">
+                {{ r.churn_prediction }}
+              </td>
+              <td class="mono">{{ (r.churn_probability * 100) | round(1) }}%</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">No predictions logged yet. <a href="/">Make your first prediction →</a></div>
+      {% endif %}
+
+    </main>
+  </div>
+</body>
+</html>

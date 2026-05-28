@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediction Result — ChurnScan</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="shell">
+
+    <header class="site-header">
+      <div class="logo">CHURN<span>SCAN</span></div>
+      <nav>
+        <a href="/">Predict</a>
+        <a href="/history">Audit Log</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-title">
+        <h1>Prediction Result</h1>
+        <p>Based on the customer profile you submitted.</p>
+      </div>
+
+      <div class="result-card {% if prediction == 'Churn' %}result-churn{% else %}result-safe{% endif %}">
+
+        <div class="result-verdict">
+          {% if prediction == "Churn" %}
+            <span class="verdict-icon">⚠</span>
+            <span class="verdict-text">HIGH CHURN RISK</span>
+          {% else %}
+            <span class="verdict-icon">✔</span>
+            <span class="verdict-text">LOW CHURN RISK</span>
+          {% endif %}
+        </div>
+
+        <div class="prob-display">
+          <div class="prob-number">{{ probability }}<span class="prob-unit">%</span></div>
+          <div class="prob-label">Churn Probability</div>
+        </div>
+
+        <div class="prob-bar-track">
+          <div class="prob-bar-fill {% if prediction == 'Churn' %}bar-danger{% else %}bar-safe{% endif %}"
+               style="width: {{ probability }}%"></div>
+        </div>
+
+        <div class="result-summary">
+          <div class="summary-item">
+            <span class="s-label">Tenure</span>
+            <span class="s-value">{{ tenure }} months</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Monthly Charges</span>
+            <span class="s-value">${{ monthly }}</span>
+          </div>
+          <div class="summary-item">
+            <span class="s-label">Contract</span>
+            <span class="s-value">{{ contract }}</span>
+          </div>
+        </div>
+
+        {% if prediction == "Churn" %}
+        <div class="insight-box">
+          <strong>Common churn signals:</strong> Month-to-month contracts, high monthly charges,
+          fiber optic internet without add-on services, and short tenure are the strongest predictors
+          in this model.
+        </div>
+        {% endif %}
+
+      </div>
+
+      <div class="action-row">
+        <a href="/" class="btn-back">← New Prediction</a>
+        <a href="/history" class="btn-history">View Audit Log</a>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Churn Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="shell">
+
+    <header class="site-header">
+      <div class="logo">CHURN<span>SCAN</span></div>
+      <nav>
+        <a href="/">Predict</a>
+        <a href="/history">Audit Log</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="page-title">
+        <h1>Customer Churn Predictor</h1>
+        <p>Enter customer profile details to get an instant churn probability score.</p>
+      </div>
+
+      {% if error %}
+      <div class="error-banner">⚠ {{ error }}</div>
+      {% endif %}
+
+      <form action="/predict" method="POST" class="predict-form">
+
+        <fieldset>
+          <legend>Demographics</legend>
+          <div class="field-row">
+            <div class="field">
+              <label>Gender</label>
+              <select name="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Senior Citizen</label>
+              <select name="SeniorCitizen">
+                <option value="0">No</option>
+                <option value="1">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Partner</label>
+              <select name="Partner">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Dependents</label>
+              <select name="Dependents">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Account Details</legend>
+          <div class="field-row">
+            <div class="field">
+              <label>Tenure (months)</label>
+              <input type="number" name="tenure" min="0" max="72" placeholder="e.g. 24" required />
+            </div>
+            <div class="field">
+              <label>Monthly Charges ($)</label>
+              <input type="number" name="MonthlyCharges" step="0.01" placeholder="e.g. 65.50" required />
+            </div>
+            <div class="field">
+              <label>Total Charges ($)</label>
+              <input type="number" name="TotalCharges" step="0.01" placeholder="e.g. 1500.00" required />
+            </div>
+            <div class="field">
+              <label>Contract</label>
+              <select name="Contract">
+                <option value="Month-to-month">Month-to-month</option>
+                <option value="One year">One year</option>
+                <option value="Two year">Two year</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Paperless Billing</label>
+              <select name="PaperlessBilling">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Payment Method</label>
+              <select name="PaymentMethod">
+                <option value="Electronic check">Electronic check</option>
+                <option value="Mailed check">Mailed check</option>
+                <option value="Bank transfer (automatic)">Bank transfer (auto)</option>
+                <option value="Credit card (automatic)">Credit card (auto)</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Services</legend>
+          <div class="field-row">
+            <div class="field">
+              <label>Phone Service</label>
+              <select name="PhoneService">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Multiple Lines</label>
+              <select name="MultipleLines">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Internet Service</label>
+              <select name="InternetService">
+                <option value="Fiber optic">Fiber optic</option>
+                <option value="DSL">DSL</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Online Security</label>
+              <select name="OnlineSecurity">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Online Backup</label>
+              <select name="OnlineBackup">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Device Protection</label>
+              <select name="DeviceProtection">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Tech Support</label>
+              <select name="TechSupport">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Streaming TV</label>
+              <select name="StreamingTV">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label>Streaming Movies</label>
+              <select name="StreamingMovies">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </select>
+            </div>
+          </div>
+        </fieldset>
+
+        <button type="submit" class="submit-btn">Run Prediction →</button>
+
+      </form>
+    </main>
+  </div>
+</body>
+</html>
