@@ -18,7 +18,7 @@ import pandas as pd
 from flask import Flask, render_template, request, redirect, url_for
 from database import init_db, log_prediction, get_recent_predictions
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 # ── Load model artifacts ───────────────────────────────────────────────────────
 with open("model.pkl", "rb") as f:
